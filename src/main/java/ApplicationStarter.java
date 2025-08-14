@@ -9,6 +9,7 @@ public class ApplicationStarter {
 
         boolean appendMode = false;
         String prefix = "";
+        String customPath = "";
         List<String> fileNames = new ArrayList<>();
 
         for (int i = 0; i < args.length; i++) {
@@ -23,6 +24,10 @@ public class ApplicationStarter {
                     prefix = args[++i];
                     break;
 
+                case "-o":
+                    customPath = args[++i];
+                    break;
+
                 default:
                     fileNames.add(args[i]);
 
@@ -32,7 +37,7 @@ public class ApplicationStarter {
 
         try {
 
-            FileFilterService service = new FileFilterService(prefix);
+            FileFilterService service = new FileFilterService(prefix, customPath);
             service.processFiles(fileNames, appendMode);
 
         } catch (IOException e) {
