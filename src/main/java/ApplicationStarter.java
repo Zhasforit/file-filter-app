@@ -1,19 +1,36 @@
 import util.FileFilterService;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationStarter {
     public static void main(String[] args) throws IOException {
 
-//        Scanner sc = new Scanner(System.in);
-//        String inputFileName = sc.nextLine();
+        boolean appendMode = false;
+        List<String> fileNames = new ArrayList<>();
 
-        String inputFileName = args[0];
-        Path filePath = Path.of(inputFileName);
+        for (String arg : args) {
 
-        FileFilterService fileFilter = new FileFilterService();
-        fileFilter.filterFile(filePath);
+            if (arg.equals("-a")) {
+                appendMode = true;
+            } else {
+                fileNames.add(arg);
+            }
+
+        }
+
+        try {
+
+            FileFilterService service = new FileFilterService();
+            service.processFiles(fileNames, appendMode);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+
+        }
+
     }
+
 }
