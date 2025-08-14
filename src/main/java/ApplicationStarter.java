@@ -8,23 +8,31 @@ public class ApplicationStarter {
     public static void main(String[] args) {
 
         boolean appendMode = false;
+        String prefix = "";
         List<String> fileNames = new ArrayList<>();
 
-        for (String arg : args) {
+        for (int i = 0; i < args.length; i++) {
 
-            if (arg.equals("-a")) {
-                appendMode = true;
-            }
+            switch (args[i]) {
 
-            else {
-                fileNames.add(arg);
+                case "-a":
+                    appendMode = true;
+                    break;
+
+                case "-p":
+                    prefix = args[++i];
+                    break;
+
+                default:
+                    fileNames.add(args[i]);
+
             }
 
         }
 
         try {
 
-            FileFilterService service = new FileFilterService();
+            FileFilterService service = new FileFilterService(prefix);
             service.processFiles(fileNames, appendMode);
 
         } catch (IOException e) {

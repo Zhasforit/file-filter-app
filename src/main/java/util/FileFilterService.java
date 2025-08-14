@@ -9,6 +9,12 @@ import java.util.List;
 
 public class FileFilterService {
 
+    private final String filePrefix;
+
+    public FileFilterService(String prefix) {
+        this.filePrefix = (prefix == null) ? "" : prefix;
+    }
+
     public void processFiles(List<String> fileNames, boolean appendMode) throws IOException {
 
         StringBuilder intData = new StringBuilder();
@@ -33,9 +39,7 @@ public class FileFilterService {
            String line;
            while ((line = reader.readLine()) != null) {
 
-               if (line.isEmpty()) {
-                   continue;
-               }
+               if (line.isEmpty()) continue;
 
                if (TypeCheckerService.isInteger(line)) {
                    intData.append(line).append("\n");
@@ -66,16 +70,20 @@ public class FileFilterService {
                 new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
                 new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
 
+        String intFile = filePrefix + "integers.txt";
+        String floatFile = filePrefix + "floats.txt";
+        String stringFile = filePrefix + "strings.txt";
+
         if (!intData.isEmpty()) {
-            Files.writeString(Path.of("integers.txt"), intData.toString(), options);
+            Files.writeString(Path.of(intFile), intData.toString(), options);
         }
 
         if (!floatData.isEmpty()) {
-            Files.writeString(Path.of("floats.txt"), floatData.toString(), options);
+            Files.writeString(Path.of(floatFile), floatData.toString(), options);
         }
 
         if (!stringData.isEmpty()) {
-            Files.writeString(Path.of("strings.txt"), stringData.toString(), options);
+            Files.writeString(Path.of(stringFile), stringData.toString(), options);
         }
 
     }
