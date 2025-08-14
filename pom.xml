@@ -16,13 +16,11 @@
 
     <build>
         <plugins>
-            <!-- Компиляция и упаковка в JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <!-- Указываем главный класс (точку входа) -->
                     <archive>
                         <manifest>
                             <mainClass>ApplicationStarter</mainClass>

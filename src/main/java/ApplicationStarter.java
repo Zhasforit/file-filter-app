@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationStarter {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         boolean appendMode = false;
         List<String> fileNames = new ArrayList<>();
@@ -14,7 +14,9 @@ public class ApplicationStarter {
 
             if (arg.equals("-a")) {
                 appendMode = true;
-            } else {
+            }
+
+            else {
                 fileNames.add(arg);
             }
 
