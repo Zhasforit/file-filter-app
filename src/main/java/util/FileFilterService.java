@@ -14,32 +14,44 @@ public class FileFilterService {
     private final Path customDir;
 
     public FileFilterService(String prefix, String customPath) {
+
         this.filePrefix = (prefix == null) ? "" : prefix;
         this.customDir = customPath.isEmpty() ? Paths.get("") : Paths.get("." + customPath);
+
     }
 
-    public void processFiles(List<String> fileNames, boolean appendMode) throws IOException {
+    public StatisticService processFiles(List<String> fileNames,
+                                         boolean appendMode,
+                                         String statsMode) throws IOException {
 
         if (!customDir.toString().isEmpty()) {
+
             Files.createDirectories(customDir);
+
         }
 
+        StatisticService stats = new StatisticService();
         StringBuilder intData = new StringBuilder();
         StringBuilder floatData = new StringBuilder();
         StringBuilder stringData = new StringBuilder();
 
         for (String fileName : fileNames) {
-            processSingleFile(fileName, intData, floatData, stringData);
+
+            processSingleFile(fileName, intData, floatData, stringData, stats);
+
         }
 
         writeResults(intData, floatData, stringData, appendMode);
+
+        return stats;
 
     }
 
     public void processSingleFile(String filename,
                                   StringBuilder intData,
                                   StringBuilder floatData,
-                                  StringBuilder stringData) throws IOException {
+                                  StringBuilder stringData,
+                                  StatisticService stats) throws IOException {
 
        try (BufferedReader reader = Files.newBufferedReader(Path.of(filename))) {
 
@@ -49,15 +61,26 @@ public class FileFilterService {
                if (line.isEmpty()) continue;
 
                if (TypeCheckerService.isInteger(line)) {
+
+                   int value = Integer.parseInt(line);
                    intData.append(line).append("\n");
+                   stats.addInteger(value);
+
                }
 
                else if (TypeCheckerService.isDouble(line)) {
+
+                   double value = Double.parseDouble(line);
                    floatData.append(line).append("\n");
+                   stats.addFloat(value);
+
                }
 
                else {
+
                    stringData.append(line).append("\n");
+                   stats.addString(line);
+
                }
 
            }
@@ -82,15 +105,21 @@ public class FileFilterService {
         Path stringFile = customDir.resolve(filePrefix + "strings.txt");
 
         if (!intData.isEmpty()) {
+
             Files.writeString(Path.of(intFile.toUri()), intData.toString(), options);
+
         }
 
         if (!floatData.isEmpty()) {
+
             Files.writeString(Path.of(floatFile.toUri()), floatData.toString(), options);
+
         }
 
         if (!stringData.isEmpty()) {
+
             Files.writeString(Path.of(stringFile.toUri()), stringData.toString(), options);
+
         }
 
     }

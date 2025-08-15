@@ -1,4 +1,5 @@
 import util.FileFilterService;
+import util.StatisticService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class ApplicationStarter {
         boolean appendMode = false;
         String prefix = "";
         String customPath = "";
+        String statsMode = "none";
         List<String> fileNames = new ArrayList<>();
 
         for (int i = 0; i < args.length; i++) {
@@ -28,6 +30,14 @@ public class ApplicationStarter {
                     customPath = args[++i];
                     break;
 
+                case "-s":
+                    statsMode = "short";
+                    break;
+
+                case "-f":
+                    statsMode = "full";
+                    break;
+
                 default:
                     fileNames.add(args[i]);
 
@@ -38,7 +48,13 @@ public class ApplicationStarter {
         try {
 
             FileFilterService service = new FileFilterService(prefix, customPath);
-            service.processFiles(fileNames, appendMode);
+            StatisticService stats = service.processFiles(fileNames, appendMode, statsMode);
+
+            if (!"none".equals(statsMode)) {
+
+                stats.printStats("full".equals(statsMode));
+
+            }
 
         } catch (IOException e) {
 
