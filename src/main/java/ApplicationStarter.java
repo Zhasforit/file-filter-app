@@ -1,67 +1,51 @@
-import util.FileFilterService;
-import util.StatisticService;
+import cli.CliArguments;
+import cli.CliArgumentsParser;
+import io.FileReaderService;
+import io.SimpleFileReader;
+import io.SimpleFileWriter;
+import processing.DataProcessor;
+import processing.DataTypeHandler;
+import processing.FloatHandler;
+import processing.IntegerHandler;
+import processing.StringHandler;
+import stats.StatisticsCollector;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationStarter {
     public static void main(String[] args) {
+        try {
+            CliArgumentsParser parser = new CliArgumentsParser();
+            CliArguments config = parser.parse(args);
 
-        boolean appendMode = false;
-        String prefix = "";
-        String customPath = "";
-        String statsMode = "none";
-        List<String> fileNames = new ArrayList<>();
+            SimpleFileWriter writer = new SimpleFileWriter(config.getPrefix(), config.getCustomPath());
+            FileReaderService reader = new SimpleFileReader();
+            StatisticsCollector stats = new StatisticsCollector();
 
-        for (int i = 0; i < args.length; i++) {
+            List<DataTypeHandler> handlers = List.of(
+                    new IntegerHandler(),
+                    new FloatHandler(),
+                    new StringHandler()
+            );
 
-            switch (args[i]) {
+            DataProcessor processor = new DataProcessor(handlers, stats, writer, config.isAppendMode());
 
-                case "-a":
-                    appendMode = true;
-                    break;
-
-                case "-p":
-                    prefix = args[++i];
-                    break;
-
-                case "-o":
-                    customPath = args[++i];
-                    break;
-
-                case "-s":
-                    statsMode = "short";
-                    break;
-
-                case "-f":
-                    statsMode = "full";
-                    break;
-
-                default:
-                    fileNames.add(args[i]);
-
+            for (String file : config.getFileNames()) {
+                List<String> lines = reader.read(file);
+                for (String line : lines) {
+                    processor.processLine(line);
+                }
             }
 
-        }
+            writer.flushAll(config.isAppendMode());
 
-        try {
-
-            FileFilterService service = new FileFilterService(prefix, customPath);
-            StatisticService stats = service.processFiles(fileNames, appendMode, statsMode);
-
-            if (!"none".equals(statsMode)) {
-
-                stats.printStats("full".equals(statsMode));
-
+            if (!"none".equals(config.getStatsMode())) {
+                stats.printStats("full".equals(config.getStatsMode()));
             }
 
         } catch (IOException e) {
-
             throw new RuntimeException(e);
-
         }
-
     }
-
 }
