@@ -8,7 +8,7 @@ public class CliArguments {
     private String prefix = "";
     private String customPath = "";
     private String statsMode = "none";
-    private final List<String> fileNames = new ArrayList<>();
+    private List<String> fileNames = new ArrayList<>();
 
     public boolean isAppendMode() { return appendMode; }
     public void setAppendMode(boolean appendMode) { this.appendMode = appendMode; }
@@ -23,4 +23,6 @@ public class CliArguments {
     public void setStatsMode(String statsMode) { this.statsMode = statsMode; }
 
     public List<String> getFileNames() { return fileNames; }
+
+    public void setFileNames(List<String> files) { this.fileNames = files; }
 }

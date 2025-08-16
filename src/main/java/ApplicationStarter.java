@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ApplicationStarter {
     public static void main(String[] args) {
-        try {
-            CliArgumentsParser parser = new CliArgumentsParser();
-            CliArguments config = parser.parse(args);
+        CliArgumentsParser parser = new CliArgumentsParser();
+        CliArguments config = parser.parse(args);
 
+        try {
             SimpleFileWriter writer = new SimpleFileWriter(config.getPrefix(), config.getCustomPath());
             FileReaderService reader = new SimpleFileReader();
             StatisticsCollector stats = new StatisticsCollector();
@@ -32,20 +32,32 @@ public class ApplicationStarter {
             DataProcessor processor = new DataProcessor(handlers, stats, writer, config.isAppendMode());
 
             for (String file : config.getFileNames()) {
-                List<String> lines = reader.read(file);
-                for (String line : lines) {
-                    processor.processLine(line);
+                try {
+                    List<String> lines = reader.read(file);
+                    for (String line : lines) {
+                        try {
+                            processor.processLine(line);
+                        } catch (IOException e) {
+                            System.err.println("Ошибка обработки строки \"" + line + "\": " + e.getMessage());
+                        }
+                    }
+                } catch (IOException e) {
+                    System.err.println("Ошибка при чтении файла \"" + file + "\": " + e.getMessage());
                 }
             }
 
-            writer.flushAll(config.isAppendMode());
+            try {
+                writer.flushAll(config.isAppendMode());
+            } catch (IOException e) {
+                System.err.println("Ошибка при сохранении файлов: " + e.getMessage());
+            }
 
             if (!"none".equals(config.getStatsMode())) {
                 stats.printStats("full".equals(config.getStatsMode()));
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ошибка инициализации: " + e.getMessage());
         }
     }
 }

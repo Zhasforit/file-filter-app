@@ -16,6 +16,11 @@ public class StatisticsCollector {
     public void addString(String value) { strings.add(value); }
 
     public void printStats(boolean fullStats) {
+        if (integers.isEmpty() && floats.isEmpty() && strings.isEmpty()) {
+            System.out.println("\nНет данных для статистики.");
+            return;
+        }
+
         System.out.println("\n=== Статистика обработки ===");
 
         if (!integers.isEmpty()) {
