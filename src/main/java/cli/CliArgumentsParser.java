@@ -64,7 +64,7 @@ public class CliArgumentsParser {
     }
 
     private void printHelp() {
-        System.out.println("Использование: java -jar app.jar [OPTIONS] file1 file2 ...");
+        System.out.println("Использование: java -jar target/file-filtering-utility-1.0.0.jar [OPTIONS] file1 file2 ...");
         System.out.println();
         System.out.println("Опции:");
         System.out.println("  -o <path>       Указать директорию для сохранения выходных файлов");
