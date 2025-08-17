@@ -46,7 +46,7 @@
 ### Требования
 
 * Java 17+
-* Maven или Gradle (для сборки проекта)
+* Maven (для сборки проекта)
 
 ### Сборка через Maven
 
@@ -54,16 +54,10 @@
 mvn clean package
 ```
 
-После сборки исполняемый файл будет в папке `target/`:
-
-```bash
-target/file-filtering-utility.jar
-```
-
 ### Пример запуска
 
 ```bash
-java -jar file-filtering-utility.jar [опции] file1.txt file2.txt ...
+java -jar file-filtering-utility-1.0.0.jar [опции] file1.txt file2.txt ...
 ```
 
 ---
@@ -86,7 +80,7 @@ java -jar file-filtering-utility.jar [опции] file1.txt file2.txt ...
 1. **Фильтрация с выводом в текущую директорию (перезапись):**
 
    ```bash
-   java -jar file-filtering-utility.jar input1.txt input2.txt
+   java -jar file-filtering-utility-1.0.0.jar input1.txt input2.txt
    ```
 
    → создаст файлы `integers.txt`, `floats.txt`, `strings.txt` в текущей папке.
@@ -94,7 +88,7 @@ java -jar file-filtering-utility.jar [опции] file1.txt file2.txt ...
 2. **Вывод в указанную директорию с префиксом:**
 
    ```bash
-   java -jar file-filtering-utility.jar -o /some/path -p result_ input1.txt
+   java -jar file-filtering-utility-1.0.0.jar -o /some/path -p result_ input1.txt
    ```
 
    → создаст файлы `/some/path/result_integers.txt`, `/some/path/result_floats.txt`, `/some/path/result_strings.txt`.
@@ -102,7 +96,7 @@ java -jar file-filtering-utility.jar [опции] file1.txt file2.txt ...
 3. **Режим дозаписи и полная статистика:**
 
    ```bash
-   java -jar file-filtering-utility.jar -a -f input.txt
+   java -jar file-filtering-utility-1.0.0.jar -a -f input.txt
    ```
 
    → данные добавятся в существующие файлы, а статистика будет полной.

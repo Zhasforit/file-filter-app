@@ -2,18 +2,26 @@ package stats;
 
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
-import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.OptionalInt;
 
 public class StatisticsCollector {
-    private final List<Integer> integers = new ArrayList<>();
+    private final List<Long> integers = new ArrayList<>();
     private final List<Double> floats = new ArrayList<>();
     private final List<String> strings = new ArrayList<>();
 
-    public void addInteger(int value) { integers.add(value); }
-    public void addFloat(double value) { floats.add(value); }
-    public void addString(String value) { strings.add(value); }
+    public void addInteger(long value) {
+        integers.add(value);
+    }
+
+    public void addFloat(double value) {
+        floats.add(value);
+    }
+
+    public void addString(String value) {
+        strings.add(value);
+    }
 
     public void printStats(boolean fullStats) {
         if (integers.isEmpty() && floats.isEmpty() && strings.isEmpty()) {
@@ -26,7 +34,7 @@ public class StatisticsCollector {
         if (!integers.isEmpty()) {
             System.out.printf("Количество целых чисел: %d%n", integers.size());
             if (fullStats) {
-                IntSummaryStatistics s = integers.stream().mapToInt(Integer::intValue).summaryStatistics();
+                LongSummaryStatistics s = integers.stream().mapToLong(Long::longValue).summaryStatistics();
                 System.out.printf(" Минимум: %d%n", s.getMin());
                 System.out.printf(" Максимум: %d%n", s.getMax());
                 System.out.printf(" Среднее: %.2f%n", s.getAverage());

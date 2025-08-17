@@ -10,9 +10,11 @@ public class FloatHandler implements DataTypeHandler {
         try {
             Double.parseDouble(value);
             return value.contains(".");
+        } catch (NumberFormatException e) {
+            return false;
         }
-        catch (NumberFormatException e) { return false; }
     }
+
     public void process(String value, StatisticsCollector stats, FileWriterService writer, boolean append) throws IOException {
         stats.addFloat(Double.parseDouble(value));
         writer.write("floats.txt", value + "\n", append);

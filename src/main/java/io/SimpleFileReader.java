@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SimpleFileReader implements FileReaderService {
-    public List<String> read(String filePath) throws IOException {
+    public List<String> read(String filePath) {
         try (BufferedReader reader = Files.newBufferedReader(Path.of(filePath))) {
             return reader.lines()
                     .filter(line -> !line.isEmpty())

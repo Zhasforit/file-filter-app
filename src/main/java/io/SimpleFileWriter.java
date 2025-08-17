@@ -25,7 +25,7 @@ public class SimpleFileWriter implements FileWriterService {
     }
 
     @Override
-    public void write(String fileName, String content, boolean append) throws IOException {
+    public void write(String fileName, String content, boolean append) {
         BufferedWriter bw = writers.computeIfAbsent(fileName, fn -> {
             try {
                 Path file = baseDir.resolve(prefix + fn);
